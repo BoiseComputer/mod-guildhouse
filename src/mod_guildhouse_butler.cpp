@@ -490,6 +490,109 @@ public:
         case 10015:
         {
             std::set<uint32> objectEntries = {1685, 4087, 180715, 2728, 184137};
+            uint32 guildPhase = GetGuildPhase(player);
+            int totalCost = 0;
+            std::vector<uint32> toSpawn;
+
+            for (auto entry : objectEntries)
+            {
+                bool objectSpawned = false;
+                for (auto const &pair : player->GetMap()->GetGameObjectBySpawnIdStore())
+                {
+                    GameObject *go = pair.second;
+                    if (go && go->GetEntry() == entry && go->GetPhaseMask() == guildPhase)
+                    {
+                        objectSpawned = true;
+                        break;
+                    }
+                }
+                if (!objectSpawned)
+                {
+                    toSpawn.push_back(entry);
+                    totalCost += (entry == 184137 ? GuildHouseMailBox : GuildHouseObject);
+                }
+            }
+
+            if (totalCost == 0)
+            {
+                ChatHandler(player->GetSession()).PSendSysMessage("All objects are already spawned.");
+                OnGossipSelect(player, creature, GOSSIP_SENDER_MAIN, 10006);
+                return false;
+            }
+
+            if (!player->HasEnoughMoney(totalCost))
+            {
+                ChatHandler(player->GetSession()).PSendSysMessage("Your guild does not have enough gold in the bank.");
+                CloseGossipMenuFor(player);
+                return false;
+            }
+
+            player->ModifyMoney(-totalCost);
+
+            for (uint32 entry : toSpawn)
+            {
+                WorldDatabase.Execute("REPLACE INTO `guild_house_purchases` (`guild`, `entry`, `type`) VALUES ({}, {}, 'gameobject')", player->GetGuildId(), entry);
+                SpawnObject(entry, player, creature, true);
+            }
+
+            ChatHandler(player->GetSession()).PSendSysMessage("All missing objects purchased and spawned for %u g.", totalCost / 10000);
+            OnGossipSelect(player, creature, GOSSIP_SENDER_MAIN, 10006);
+            break;
+        }
+
+        // Sell All Objects
+        case 20015:
+        {
+            std::set<uint32> objectEntries = {1685, 4087, 180715, 2728, 184137};
+            uint32 guildPhase = GetGuildPhase(player);
+            int totalRefund = 0;
+            std::vector<GameObject *> toRemove;
+
+            for (auto entry : objectEntries)
+            {
+                for (auto const &pair : player->GetMap()->GetGameObjectBySpawnIdStore())
+                {
+                    GameObject *go = pair.second;
+                    if (go && go->GetEntry() == entry && go->GetPhaseMask() == guildPhase)
+                    {
+                        toRemove.push_back(go);
+                        totalRefund += (entry == 184137 ? GuildHouseMailBox : GuildHouseObject) * GuildHouseRefundPercent / 100;
+                        break;
+                    }
+                }
+            }
+
+            if (toRemove.empty())
+            {
+                ChatHandler(player->GetSession()).PSendSysMessage("No objects found to remove.");
+                OnGossipSelect(player, creature, GOSSIP_SENDER_MAIN, 10006);
+                return false;
+            }
+
+            player->ModifyMoney(totalRefund);
+
+            for (GameObject *go : toRemove)
+            {
+                uint32 entry = go->GetEntry();
+                uint32 spawnId = go->GetSpawnId();
+                if (go->IsInWorld())
+                    go->RemoveFromWorld();
+                if (sObjectMgr->GetGameObjectData(spawnId))
+                    go->DeleteFromDB();
+                WorldDatabase.Execute("DELETE FROM `guild_house_purchases` WHERE `guild`={} AND `entry`={} AND `type`='gameobject'",
+                                      player->GetGuildId(), entry);
+                AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, "Sell All Objects", GOSSIP_SENDER_MAIN,
+                                 20015, "Remove all objects and get a refund?", totalRefundAll, false);
+            }
+            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Back", GOSSIP_SENDER_MAIN, 9);
+            SendGossipMenuFor(player, DEFAULT_GOSSIP_MESSAGE, creature->GetGUID());
+            break;
+        }
+
+        // Buy All Objects
+        case 10015:
+        {
+            std::set<uint32> objectEntries = {1685, 4087, 180715, 2728, 184137};
             uint32 guildPhase = this->GetGuildPhase(player);
             int totalCost = 0;
             std::vector<uint32> toSpawn;
