@@ -186,9 +186,81 @@ public:
                 case 6491:
                     npcRole = "Spirit Healer";
                     break;
-                // ...add other cases as needed...
+                case 24545:
+                    npcRole = "Guild Banker";
+                    break;
+                case 9856:
+                    npcRole = "Auctioneer";
+                    break;
+                case 8719:
+                    npcRole = "Auctioneer";
+                    break;
+                case 9858:
+                    npcRole = "Auctioneer";
+                    break;
+                case 500031:
+                    npcRole = "Butler";
+                    break;
+                case 19052:
+                    npcRole = "Mailbox";
+                    break;
+                case 19871:
+                    npcRole = "Guild Vault";
+                    break;
+                case 28776:
+                    npcRole = "Reagent Vendor";
+                    break;
+                case 28692:
+                    npcRole = "General Goods Vendor";
+                    break;
+                case 2622:
+                    npcRole = "Weapon Vendor";
+                    break;
+                case 29493:
+                    npcRole = "Food & Drink Vendor";
+                    break;
+                case 4255:
+                    npcRole = "Leatherworking Supplies";
+                    break;
+                case 29636:
+                    npcRole = "Stable Supplies";
+                    break;
+                case 32478:
+                    npcRole = "Enchanting Supplies";
+                    break;
+                case 500033:
+                    npcRole = "Dual Spec Trainer";
+                    break;
+                case 500034:
+                    npcRole = "Transmog Vendor";
+                    break;
+                case 500035:
+                    npcRole = "Mount Vendor";
+                    break;
+                case 500036:
+                    npcRole = "Heirloom Vendor";
+                    break;
+                case 500037:
+                    npcRole = "Battlemaster";
+                    break;
+                case 2879:
+                    npcRole = "Banker";
+                    break;
+                case 24547:
+                    npcRole = "Tabard Vendor";
+                    break;
+                case 2878:
+                    npcRole = "Guild Tabard Designer";
+                    break;
+                case 500038:
+                    npcRole = "Barber";
+                    break;
+                case 500039:
+                    npcRole = "Void Storage";
+                    break;
+                // Add more as needed
                 default:
-                    npcRole = "Essential NPC";
+                    npcRole = "Vendor";
                     break;
                 }
 
@@ -396,10 +468,65 @@ public:
                 }
                 int costValue = GetGuildHouseEntryCost(entry);
 
-                // Lookup vendor name from creature template
-                std::string vendorName = "Vendor";
-                if (auto tmpl = sObjectMgr->GetCreatureTemplate(entry))
-                    vendorName = tmpl->Name;
+                std::string vendorName;
+                switch (entry)
+                {
+                case 28776:
+                    vendorName = "Reagent Vendor";
+                    break;
+                case 28692:
+                    vendorName = "General Goods Vendor";
+                    break;
+                case 2622:
+                    vendorName = "Weapon Vendor";
+                    break;
+                case 29493:
+                    vendorName = "Food & Drink Vendor";
+                    break;
+                case 4255:
+                    vendorName = "Leatherworking Supplies";
+                    break;
+                case 29636:
+                    vendorName = "Stable Supplies";
+                    break;
+                case 32478:
+                    vendorName = "Enchanting Supplies";
+                    break;
+                case 500033:
+                    vendorName = "Dual Spec Trainer";
+                    break;
+                case 500034:
+                    vendorName = "Transmog Vendor";
+                    break;
+                case 500035:
+                    vendorName = "Mount Vendor";
+                    break;
+                case 500036:
+                    vendorName = "Heirloom Vendor";
+                    break;
+                case 500037:
+                    vendorName = "Battlemaster";
+                    break;
+                case 2879:
+                    vendorName = "Banker";
+                    break;
+                case 24547:
+                    vendorName = "Tabard Vendor";
+                    break;
+                case 2878:
+                    vendorName = "Guild Tabard Designer";
+                    break;
+                case 500038:
+                    vendorName = "Barber";
+                    break;
+                case 500039:
+                    vendorName = "Void Storage";
+                    break;
+                // Add more as needed
+                default:
+                    vendorName = "Vendor";
+                    break;
+                }
 
                 if (!spawned)
                 {
@@ -473,7 +600,43 @@ public:
                 if (!spawned)
                 {
                     notSpawned++;
-                    std::string portalLabel = "Portal";
+                    std::string portalLabel;
+                    switch (entry)
+                    {
+                    case 500000:
+                        portalLabel = "Stormwind Portal";
+                        break;
+                    case 500001:
+                        portalLabel = "Darnassus Portal";
+                        break;
+                    case 500002:
+                        portalLabel = "Exodar Portal";
+                        break;
+                    case 500003:
+                        portalLabel = "Ironforge Portal";
+                        break;
+                    case 500004:
+                        portalLabel = "Orgrimmar Portal";
+                        break;
+                    case 500005:
+                        portalLabel = "Silvermoon Portal";
+                        break;
+                    case 500006:
+                        portalLabel = "Thunder Bluff Portal";
+                        break;
+                    case 500007:
+                        portalLabel = "Undercity Portal";
+                        break;
+                    case 500008:
+                        portalLabel = "Shattrath Portal";
+                        break;
+                    case 500009:
+                        portalLabel = "Dalaran Portal";
+                        break;
+                    default:
+                        portalLabel = "Portal";
+                        break;
+                    }
                     AddGossipItemFor(player, GOSSIP_ICON_BATTLE, "Spawn " + portalLabel, GOSSIP_SENDER_MAIN, entry, "Spawn a Portal?", costValue, false);
                 }
                 else
@@ -523,7 +686,39 @@ public:
 
             for (auto entry : objectEntries)
             {
-                std::string label = "Object";
+                std::string label;
+                switch (entry)
+                {
+                case 184137:
+                    label = "Mailbox";
+                    break;
+                case 19871:
+                    label = "Guild Vault";
+                    break;
+                case 19052:
+                    label = "Guild Bank";
+                    break;
+                case 500040:
+                    label = "Training Dummy";
+                    break;
+                case 500041:
+                    label = "Forge";
+                    break;
+                case 500042:
+                    label = "Anvil";
+                    break;
+                case 500043:
+                    label = "Alchemy Lab";
+                    break;
+                case 500044:
+                    label = "Cooking Fire";
+                    break;
+                // Add more cases for your custom object entries as needed
+                default:
+                    label = "Object";
+                    break;
+                }
+
                 bool spawned = false;
                 for (auto const &pair : player->GetMap()->GetGameObjectBySpawnIdStore())
                 {
@@ -535,14 +730,11 @@ public:
                     }
                 }
                 int costValue = GetGuildHouseEntryCost(entry);
-                std::string objectName = "Object";
-                if (auto tmpl = sObjectMgr->GetGameObjectTemplate(entry))
-                    objectName = tmpl->name;
 
                 if (!spawned)
                 {
                     notSpawned++;
-                    AddGossipItemFor(player, GOSSIP_ICON_BATTLE, "Spawn " + objectName, GOSSIP_SENDER_MAIN, entry, "Spawn a " + label + "?", costValue, false);
+                    AddGossipItemFor(player, GOSSIP_ICON_BATTLE, "Spawn " + label, GOSSIP_SENDER_MAIN, entry, "Spawn a " + label + "?", costValue, false);
                 }
                 else
                 {
