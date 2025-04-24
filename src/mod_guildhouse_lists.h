@@ -36,7 +36,7 @@ static const std::set<uint32_t> professionTrainerEntries = {
     2627,  // Mining
     19184, // Skinning
     2834,  // Tailoring
-    19185  // Engineering
+    19185  // First Aid
 };
 
 static const std::set<uint32_t> vendorEntries = {
@@ -51,7 +51,7 @@ static const std::set<uint32_t> vendorEntries = {
     500034, // Transmog Vendor
     500035, // Mount Vendor
     500036, // Fishing Vendor
-    500037  // Dual Spec Trainer
+    500037  // Battlemaster
 };
 
 static const std::set<uint32_t> objectEntries = {
@@ -68,7 +68,7 @@ static const std::set<uint32_t> objectEntries = {
 
 static const std::set<uint32_t> portalEntries = {
     500000, // Stormwind
-    500001, // Orgrimmar
+    500001, // Exodar
     500002, // Darnassus
     500003, // Ironforge
     500004, // Orgrimmar
