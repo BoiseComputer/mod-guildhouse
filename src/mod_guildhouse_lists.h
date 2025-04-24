@@ -13,18 +13,68 @@ static const std::set<uint32_t> essentialNpcEntries = {
 };
 
 static const std::set<uint32_t> classTrainerEntries = {
-    26327, 26324, 26325, 26326, 26328, 26329, 26330, 26331, 26332, 29195};
+    26327, // Death Knight
+    26324, // Druid
+    26325, // Hunter
+    26326, // Mage
+    26328, // Paladin
+    26329, // Priest
+    26330, // Rogue
+    26331, // Shaman
+    26332, // Warlock
+    29195  // Warrior
+};
 
 static const std::set<uint32_t> professionTrainerEntries = {
-    2836, 8128, 8736, 19187, 19180, 19052, 908, 2627, 19184, 2834, 19185};
+    2836,  // Alchemy
+    8128,  // Blacksmithing
+    8736,  // Enchanting
+    19187, // Engineering
+    19180, // Herbalism
+    19052, // Inscription
+    908,   // Leatherworking
+    2627,  // Mining
+    19184, // Skinning
+    2834,  // Tailoring
+    19185  // Engineering
+};
 
 static const std::set<uint32_t> vendorEntries = {
-    28692, 28776, 4255, 29636, 29493, 2622,
-    32478, // Fishing Vendor
-    500033, 500034, 500035, 500036, 500037};
+    28692,  // General Goods Vendor
+    28776,  // Reagent Vendor
+    4255,   // Leatherworking Supplies
+    29636,  // Stable Supplies
+    29493,  // Food & Drink Vendor
+    2622,   // Weapon Vendor
+    32478,  // Enchanting Supplies
+    500033, // Dual Spec Trainer
+    500034, // Transmog Vendor
+    500035, // Mount Vendor
+    500036, // Fishing Vendor
+    500037  // Dual Spec Trainer
+};
 
 static const std::set<uint32_t> objectEntries = {
-    1685, 4087, 180715, 2728, 184137, 191028};
+    184137, // Mailbox
+    1685,   // Guild Vault
+    4087,   // Guild Bank
+    500040, // Training Dummy
+    500041, // Forge
+    500042, // Anvil
+    500043, // Alchemy Lab
+    500044  // Cooking Fire
+    // Add more as needed
+};
 
 static const std::set<uint32_t> portalEntries = {
-    500000, 500001, 500002, 500003, 500004, 500005, 500006, 500007, 500008, 500009};
+    500000, // Stormwind
+    500001, // Orgrimmar
+    500002, // Darnassus
+    500003, // Ironforge
+    500004, // Orgrimmar
+    500005, // Silvermoon
+    500006, // Thunder Bluff
+    500007, // Undercity
+    500008, // Shattrath
+    500009  // Dalaran
+};

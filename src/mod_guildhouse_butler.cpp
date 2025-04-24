@@ -1011,7 +1011,7 @@ public:
 
         if (type == "creature")
         {
-            QueryResult CreatureResult = WorldDatabase.Query("SELECT lowguid FROM creature_spawn WHERE entry IN ({})", JoinContainer(entries, ","));
+            QueryResult CreatureResult = WorldDatabase.Query("SELECT guid FROM creature WHERE id IN ({})", JoinContainer(entries, ","));
             if (CreatureResult)
             {
                 do
