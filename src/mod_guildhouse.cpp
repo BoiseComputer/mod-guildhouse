@@ -14,9 +14,55 @@
 #include "GameObject.h"
 #include "Transport.h"
 #include "Maps/MapMgr.h"
+#include "mod_guildhouse_lists.h"
 
-// Add global variable for GuildHousePhaseBase
-int GuildHousePhaseBase = 10000; // default, will be overwritten by config
+int GuildHouseInnKeeper, GuildHouseBank, GuildHouseMailBox, GuildHouseAuctioneer, GuildHouseTrainer, GuildHouseVendor, GuildHouseObject, GuildHousePortal, GuildHouseSpirit, GuildHouseProf, GuildHouseBuyRank;
+int GuildHouseRefundPercent = 50;
+uint32 GuildHouseMarkerEntry;
+uint32 GuildHousePhaseBase = 10000;
+
+// Central cost lookup for all guild house entries
+int GetGuildHouseEntryCost(uint32 entry)
+{
+    // Vendor costs (including new entries)
+    static std::map<uint32, int> vendorCosts = {
+        {28692, GuildHouseVendor}, {28776, GuildHouseVendor}, {4255, GuildHouseVendor}, {29636, GuildHouseVendor}, {29493, GuildHouseVendor}, {2622, GuildHouseVendor}, {32478, GuildHouseVendor}, {500033, sConfigMgr->GetOption<int32>("GuildHouseDualSpecTrainer", 1000000)}, {500034, sConfigMgr->GetOption<int32>("GuildHouseTransmog", 1000000)}, {500035, sConfigMgr->GetOption<int32>("GuildHouseMountVendor", 1000000)}, {500036, sConfigMgr->GetOption<int32>("GuildHouseHeirloomVendor", 1000000)}, {500037, sConfigMgr->GetOption<int32>("GuildHouseBattlemaster", 1000000)}};
+
+    // Essential NPCs
+    if (entry == 6930) // Innkeeper
+        return GuildHouseInnKeeper;
+    if (entry == 28690) // Stable Master
+        return GuildHouseVendor;
+    if (entry == 6491) // Spirit Healer
+        return GuildHouseSpirit;
+    if (entry == 9858 || entry == 8719 || entry == 9856) // Auctioneers
+        return GuildHouseAuctioneer;
+
+    // Class Trainers
+    if (classTrainerEntries.count(entry))
+        return GuildHouseTrainer;
+
+    // Profession Trainers
+    if (professionTrainerEntries.count(entry))
+        return GuildHouseProf;
+
+    // Vendors
+    if (vendorCosts.count(entry))
+        return vendorCosts[entry];
+
+    // Objects
+    if (entry == 184137) // Mailbox
+        return GuildHouseMailBox;
+
+    if (objectEntries.count(entry))
+        return GuildHouseObject;
+
+    // Portals
+    if (portalEntries.count(entry))
+        return GuildHousePortal;
+
+    return 0; // Unknown entry
+}
 
 class GuildData : public DataMap::Base
 {
@@ -186,8 +232,6 @@ public:
             {
                 AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, "Sell Guild House!", GOSSIP_SENDER_MAIN, 3, "Are you sure you want to sell your Guild House?", 0, false);
             }
-
-            AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, "Buy All Essential NPCs", GOSSIP_SENDER_MAIN, 10021, "Are you sure you want to buy all essential NPCs?", 0, false);
         }
         else
         {
@@ -263,26 +307,7 @@ public:
 
                         if (type == "creature")
                         {
-                            switch (entry)
-                            {
-                            case 6930:
-                                costValue = sConfigMgr->GetOption<int32>("GuildHouseInnKeeper", 1000000);
-                                break;
-                            case 28690:
-                                costValue = sConfigMgr->GetOption<int32>("GuildHouseVendor", 500000);
-                                break;
-                            case 9858:
-                            case 8719:
-                            case 9856:
-                                costValue = sConfigMgr->GetOption<int32>("GuildHouseAuctioneer", 500000);
-                                break;
-                            case 6491:
-                                costValue = sConfigMgr->GetOption<int32>("GuildHouseSpirit", 100000);
-                                break;
-                            default:
-                                costValue = sConfigMgr->GetOption<int32>("GuildHouseVendor", 500000);
-                                break;
-                            }
+                            costValue = GetGuildHouseEntryCost(entry);
                         }
                         else if (type == "gameobject")
                         {
@@ -301,7 +326,7 @@ public:
                 if (totalItemRefund > 0)
                 {
                     player->ModifyMoney(totalItemRefund);
-                    ChatHandler(player->GetSession()).PSendSysMessage("Refunded %u g for purchased items.", totalItemRefund / 10000);
+                    ChatHandler(player->GetSession()).PSendSysMessage("Refunded %u gold for purchased items.", totalItemRefund / 10000);
                 }
 
                 WorldDatabase.Execute("DELETE FROM guild_house_purchases WHERE guild={}", player->GetGuildId());
@@ -380,15 +405,17 @@ public:
         if (!map)
             return false;
 
-        GameobjResult = WorldDatabase.Query("SELECT `guid` FROM `gameobject` WHERE `map` = 1 AND `phaseMask` = '{}'", guildPhase);
-        CreatureResult = WorldDatabase.Query("SELECT `guid` FROM `creature` WHERE `map` = 1 AND `phaseMask` = '{}'", guildPhase);
+        GameobjResult = WorldDatabase.Query("SELECT `guid`, `id` FROM `gameobject` WHERE `map` = 1 AND `phaseMask` = '{}'", guildPhase);
+        CreatureResult = WorldDatabase.Query("SELECT `guid`, `id1` FROM `creature` WHERE `map` = 1 AND `phaseMask` = '{}'", guildPhase);
 
+        // Remove creatures from the deleted guild house map
         if (CreatureResult)
         {
             do
             {
                 Field *fields = CreatureResult->Fetch();
                 uint32 lowguid = fields[0].Get<uint32>();
+                uint32 entry = fields[1].Get<uint32>();
                 if (CreatureData const *cr_data = sObjectMgr->GetCreatureData(lowguid))
                 {
                     Creature *creature = map->GetCreature(ObjectGuid::Create<HighGuid::Unit>(cr_data->id1, lowguid));
@@ -403,16 +430,17 @@ public:
             } while (CreatureResult->NextRow());
         }
 
+        // Remove gameobjects from the deleted guild house map
         if (GameobjResult)
         {
             do
             {
                 Field *fields = GameobjResult->Fetch();
                 uint32 lowguid = fields[0].Get<uint32>();
+                uint32 entry = fields[1].Get<uint32>();
                 if (GameObjectData const *go_data = sObjectMgr->GetGameObjectData(lowguid))
                 {
-                    GameObject *gobject = map->GetGameObject(ObjectGuid::Create<HighGuid::GameObject>(go_data->id, lowguid));
-                    if (gobject)
+                    if (GameObject *gobject = map->GetGameObject(ObjectGuid::Create<HighGuid::GameObject>(go_data->id, lowguid)))
                     {
                         gobject->SetRespawnTime(0);
                         gobject->Delete();
@@ -421,6 +449,37 @@ public:
                     }
                 }
             } while (GameobjResult->NextRow());
+        }
+
+        // Refund logic for all purchased items
+        int totalItemRefund = 0;
+        QueryResult purchases = WorldDatabase.Query(
+            "SELECT entry, type FROM guild_house_purchases WHERE guild={}", player->GetGuildId());
+        if (purchases)
+        {
+            do
+            {
+                Field *f = purchases->Fetch();
+                uint32 entry = f[0].Get<uint32>();
+                std::string type = f[1].Get<std::string>();
+                int costValue = 0;
+
+                if (type == "creature" || type == "gameobject")
+                {
+                    costValue = GetGuildHouseEntryCost(entry);
+                }
+                totalItemRefund += costValue * sConfigMgr->GetOption<int32>("GuildHouseRefundPercent", 50) / 100;
+
+                WorldDatabase.Execute(
+                    "DELETE FROM guild_house_purchases WHERE guild={} AND entry={}",
+                    player->GetGuildId(), entry);
+            } while (purchases->NextRow());
+        }
+
+        if (totalItemRefund > 0)
+        {
+            player->ModifyMoney(totalItemRefund);
+            ChatHandler(player->GetSession()).PSendSysMessage("Refunded %u gold for purchased items.", totalItemRefund / 10000);
         }
 
         CharacterDatabase.Query("DELETE FROM `guild_house` WHERE `guild`={}", player->GetGuildId());
@@ -433,8 +492,13 @@ public:
     {
         if (!player)
             return;
-        std::vector<uint32> portalEntries = {500000, 500004};
-        float posX, posY, posZ, ori;
+
+        // Place all portals in their normal order, but only spawn the permanent ones
+        std::vector<uint32> portalEntries = {
+            500000, // Stormwind
+            500004  // Orgrimmar
+        };
+
         Map *map = sMapMgr->FindMap(1, 0);
         if (!map)
             return;
@@ -443,51 +507,34 @@ public:
         {
             QueryResult result = WorldDatabase.Query("SELECT `posX`, `posY`, `posZ`, `orientation` FROM `guild_house_spawns` WHERE `entry`={}", entry);
             if (!result)
-            {
-                LOG_INFO("modules", "GUILDHOUSE: Unable to find data on portal for entry: {}", entry);
                 continue;
-            }
             Field *fields = result->Fetch();
-            posX = fields[0].Get<float>();
-            posY = fields[1].Get<float>();
-            posZ = fields[2].Get<float>();
-            ori = fields[3].Get<float>();
+            float posX = fields[0].Get<float>();
+            float posY = fields[1].Get<float>();
+            float posZ = fields[2].Get<float>();
+            float ori = fields[3].Get<float>();
 
-            uint32 objectId = entry;
-            if (!objectId)
-            {
-                LOG_INFO("modules", "GUILDHOUSE: objectId IS NULL, should be '{}'", entry);
-                continue;
-            }
-
-            const GameObjectTemplate *objectInfo = sObjectMgr->GetGameObjectTemplate(objectId);
+            const GameObjectTemplate *objectInfo = sObjectMgr->GetGameObjectTemplate(entry);
             if (!objectInfo)
-            {
-                LOG_INFO("modules", "GUILDHOUSE: objectInfo is NULL!");
                 continue;
-            }
             if (objectInfo->displayId && !sGameObjectDisplayInfoStore.LookupEntry(objectInfo->displayId))
-            {
-                LOG_INFO("modules", "GUILDHOUSE: Unable to find displayId??");
                 continue;
-            }
 
+            ObjectGuid::LowType guidLow = map->GenerateLowGuid<HighGuid::GameObject>();
             GameObject *object = sObjectMgr->IsGameObjectStaticTransport(objectInfo->entry) ? new StaticTransport() : new GameObject();
-            ObjectGuid::LowType guidLow = player->GetMap()->GenerateLowGuid<HighGuid::GameObject>();
 
             if (!object->Create(guidLow, objectInfo->entry, map, GetGuildPhase(player), posX, posY, posZ, ori, G3D::Quat(), 0, GO_STATE_READY))
             {
                 delete object;
-                LOG_INFO("modules", "GUILDHOUSE: Unable to create object!!");
                 continue;
             }
 
-            object->SaveToDB(sMapMgr->FindMap(1, 0)->GetId(), (1 << sMapMgr->FindMap(1, 0)->GetSpawnMode()), GetGuildPhase(player));
+            object->SaveToDB(map->GetId(), (1 << map->GetSpawnMode()), GetGuildPhase(player));
             guidLow = object->GetSpawnId();
             delete object;
 
             object = sObjectMgr->IsGameObjectStaticTransport(objectInfo->entry) ? new StaticTransport() : new GameObject();
-            if (!object->LoadGameObjectFromDB(guidLow, sMapMgr->FindMap(1, 0), true))
+            if (!object->LoadGameObjectFromDB(guidLow, map, true))
             {
                 delete object;
                 continue;

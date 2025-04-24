@@ -128,3 +128,33 @@ GuildHouseMarkerEntry = 999999
 # default = 10000
 #
 GuildHousePhaseBase = 10000
+
+# GuildHouseDualSpecTrainer
+#
+# The amount of money to buy a dual spec trainer for your guild house
+# default = 1000000 (100g)
+GuildHouseDualSpecTrainer = 1000000
+
+# GuildHouseTransmog
+#
+# The amount of money to buy a transmog vendor for your guild house
+# default = 1000000 (100g)
+GuildHouseTransmog = 1000000
+
+# GuildHouseMountVendor
+#
+# The amount of money to buy a mount vendor for your guild house
+# default = 1000000 (100g)
+GuildHouseMountVendor = 1000000
+
+# GuildHouseHeirloomVendor
+#
+# The amount of money to buy a heirloom vendor for your guild house
+# default = 1000000 (100g)
+GuildHouseHeirloomVendor = 1000000
+
+# GuildHouseBattlemaster
+#
+# The amount of money to buy a battlemaster for your guild house
+# default = 1000000 (100g)
+GuildHouseBattlemaster = 1000000
