@@ -1,8 +1,1 @@
-void AddGuildHouseScripts();
-void AddGuildHouseButlerScripts();
-
-void Addmod_guildhouseScripts()
-{
-    AddGuildHouseScripts();
-    AddGuildHouseButlerScripts();
-}
+extern "C" void Addmod_guildhouseScripts();

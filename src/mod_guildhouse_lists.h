@@ -5,10 +5,8 @@
 
 static const std::set<uint32_t> essentialNpcEntries = {
     6930,  // Innkeeper
-    28690, // Stable Master
-    9858,  // Auctioneer Kresky
-    8719,  // Auctioneer Fitch
-    9856,  // Auctioneer Grimful
+    28047, // Stable Master (Mei Francis)
+    8661,  // Auctioneer Beardo (Neutral)
     6491   // Spirit Healer
 };
 
@@ -26,32 +24,35 @@ static const std::set<uint32_t> classTrainerEntries = {
 };
 
 static const std::set<uint32_t> professionTrainerEntries = {
-    2836,  // Alchemy
-    8128,  // Blacksmithing
-    8736,  // Enchanting
-    19187, // Engineering
-    19180, // Herbalism
-    19052, // Inscription
-    908,   // Leatherworking
-    2627,  // Mining
-    19184, // Skinning
-    2834,  // Tailoring
-    19185  // First Aid
+    28703, // Alchemy (Linzy Blackbolt)
+    28694, // Blacksmithing (Alard Schmied)
+    28693, // Enchanting (Enchanter Nalthanis)
+    29513, // Engineering (Didi the Wrench)
+    28702, // Inscription (Professor Pallin)
+    28701, // Jewelcrafting (Timothy Jones)
+    28700, // Leatherworking (Awan Iceborn)
+    28697, // Mining (Jedidiah Handers)
+    28704, // Herbalism (Dorothy Egan)
+    28699, // Tailoring (Charles Worth)
+    19185, // First Aid (Brynna Wilson, not in Dalaran but still Master)
+    29631, // Cooking (Awilo Lon'gomba)
+    28742  // Fishing (Marcia Chase)
 };
 
 static const std::set<uint32_t> vendorEntries = {
-    28692,  // General Goods Vendor
-    28776,  // Reagent Vendor
-    4255,   // Leatherworking Supplies
-    29636,  // Stable Supplies
-    29493,  // Food & Drink Vendor
-    2622,   // Weapon Vendor
-    32478,  // Enchanting Supplies
-    500033, // Dual Spec Trainer
-    500034, // Transmog Vendor
-    500035, // Mount Vendor
-    500036, // Fishing Vendor
-    500037  // Battlemaster
+    500033,  // Dual Spec Trainer
+    500034,  // Transmogrifier
+    5000351, // Mount Vendor: Hoofed
+    5000352, // Mount Vendor: Steeds
+    5000353, // Mount Vendor: Wild
+    5000354, // Mount Vendor: Raptors & Drakes
+    5000355, // Mount Vendor: Exotics
+    5000356, // Mount Vendor: Special
+    500036,  // Heirloom Vendor
+    29533,   // Battlemaster (Alliance/Horde)
+    32478,   // Food & Drink Vendor (Slosh)
+    29493,   // Specialty Ammunition Vendor (Alchemist Finklestein)
+    // ...other vendors...
 };
 
 static const std::set<uint32_t> objectEntries = {

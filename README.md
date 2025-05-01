@@ -42,6 +42,15 @@ All guilds will get their own phasing system and then the guild master can purch
 2) Re-run cmake and launch a clean build of AzerothCore.
 ```
 
+## Database Setup
+
+Import the following SQL files in order for a complete Guild House setup:
+
+- data/sql/db-world/2024_04_07_00_creatures_objects.sql
+- data/sql/db-world/2024_04_07_01_guildhouse_spawns.sql
+- data/sql/db-world/2025_04_25_01_guildhouse_mount_vendor.sql
+- data/sql/db-world/2025_04_25_03_guildhouse_mount_vendor_spawns.sql
+
 ## Edit module configuration (optional)
 
 If you need to change the module configuration, go to your server configuration folder (where your `worldserver` or `worldserver.exe` is), copy `mod_guildhouse.conf.dist` to `mod_guildhouse.conf` and edit that new file.

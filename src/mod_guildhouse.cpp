@@ -25,8 +25,8 @@ uint32 GuildHousePhaseBase = 10000;
 int GetGuildHouseEntryCost(uint32 entry)
 {
     // Vendor costs (including new entries)
-    static std::map<uint32, int> vendorCosts = {
-        {28692, GuildHouseVendor}, {28776, GuildHouseVendor}, {4255, GuildHouseVendor}, {29636, GuildHouseVendor}, {29493, GuildHouseVendor}, {2622, GuildHouseVendor}, {32478, GuildHouseVendor}, {500033, sConfigMgr->GetOption<int32>("GuildHouseDualSpecTrainer", 1000000)}, {500034, sConfigMgr->GetOption<int32>("GuildHouseTransmog", 1000000)}, {500035, sConfigMgr->GetOption<int32>("GuildHouseMountVendor", 1000000)}, {500036, sConfigMgr->GetOption<int32>("GuildHouseHeirloomVendor", 1000000)}, {500037, sConfigMgr->GetOption<int32>("GuildHouseBattlemaster", 1000000)}};
+    static std::map<uint32_t, int> vendorCosts = {
+        {28692, GuildHouseVendor}, {28776, GuildHouseVendor}, {4255, GuildHouseVendor}, {29636, GuildHouseVendor}, {29493, GuildHouseVendor}, {2622, GuildHouseVendor}, {32478, GuildHouseVendor}, {500033, sConfigMgr->GetOption<int32>("GuildHouseDualSpecTrainer", 1000000)}, {500034, sConfigMgr->GetOption<int32>("GuildHouseTransmog", 1000000)}, {500035, sConfigMgr->GetOption<int32>("GuildHouseMountVendor", 1000000)}, {5000351, sConfigMgr->GetOption<int32>("GuildHouseMountVendor", 1000000)}, {5000352, sConfigMgr->GetOption<int32>("GuildHouseMountVendor", 1000000)}, {5000353, sConfigMgr->GetOption<int32>("GuildHouseMountVendor", 1000000)}, {5000354, sConfigMgr->GetOption<int32>("GuildHouseMountVendor", 1000000)}, {5000355, sConfigMgr->GetOption<int32>("GuildHouseMountVendor", 1000000)}, {5000356, sConfigMgr->GetOption<int32>("GuildHouseMountVendor", 1000000)}, {500036, sConfigMgr->GetOption<int32>("GuildHouseHeirloomVendor", 1000000)}, {29533, sConfigMgr->GetOption<int32>("GuildHouseBattlemaster", 1000000)}};
 
     // Essential NPCs
     if (entry == 6930) // Innkeeper
@@ -326,7 +326,7 @@ public:
                 if (totalItemRefund > 0)
                 {
                     player->ModifyMoney(totalItemRefund);
-                    ChatHandler(player->GetSession()).PSendSysMessage("Refunded %u gold for purchased items.", totalItemRefund / 10000);
+                    ChatHandler(player->GetSession()).PSendSysMessage("Refunded {} gold for purchased items.", totalItemRefund / 10000);
                 }
 
                 WorldDatabase.Execute("DELETE FROM guild_house_purchases WHERE guild={}", player->GetGuildId());
@@ -479,7 +479,7 @@ public:
         if (totalItemRefund > 0)
         {
             player->ModifyMoney(totalItemRefund);
-            ChatHandler(player->GetSession()).PSendSysMessage("Refunded %u gold for purchased items.", totalItemRefund / 10000);
+            ChatHandler(player->GetSession()).PSendSysMessage("Refunded {} gold for purchased items.", totalItemRefund / 10000);
         }
 
         CharacterDatabase.Query("DELETE FROM `guild_house` WHERE `guild`={}", player->GetGuildId());
@@ -878,26 +878,6 @@ class GuildHouseGlobal : public GlobalScript
 {
 public:
     GuildHouseGlobal() : GlobalScript("GuildHouseGlobal") {}
-
-    void OnBeforeWorldObjectSetPhaseMask(WorldObject const *worldObject, uint32 & /*oldPhaseMask*/, uint32 & /*newPhaseMask*/, bool &useCombinedPhases, bool & /*update*/) override
-    {
-        if (worldObject->GetZoneId() == 876)
-            useCombinedPhases = false;
-        else
-            useCombinedPhases = true;
-    }
-};
-
-// Add config loader for GuildHousePhaseBase
-class GuildHouseConf : public WorldScript
-{
-public:
-    GuildHouseConf() : WorldScript("GuildHouseConf") {}
-
-    void OnBeforeConfigLoad(bool /*reload*/) override
-    {
-        GuildHousePhaseBase = sConfigMgr->GetOption<int32>("GuildHousePhaseBase", 10000);
-    }
 };
 
 void AddGuildHouseScripts()
@@ -907,5 +887,4 @@ void AddGuildHouseScripts()
     new GuildHousePlayerScript();
     new GuildHouseCommand();
     new GuildHouseGlobal();
-    new GuildHouseConf(); // Register config loader
 }
