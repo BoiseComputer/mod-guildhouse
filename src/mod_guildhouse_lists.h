@@ -35,8 +35,8 @@ static const std::set<uint32_t> professionTrainerEntries = {
     28704, // Herbalism (Dorothy Egan)
     28699, // Tailoring (Charles Worth)
     19185, // First Aid (Brynna Wilson, not in Dalaran but still Master)
-    29631, // Cooking (Awilo Lon'gomba)
-    28742  // Fishing (Marcia Chase)
+    28742, // Fishing (Marcia Chase)
+    600001 // Neutral Grand Master Cooking Trainer
 };
 
 static const std::set<uint32_t> vendorEntries = {

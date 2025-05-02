@@ -58,14 +58,30 @@ REPLACE INTO `gameobject_template` (`entry`, `type`, `displayId`, `name`, `IconN
 (@GO_TEMPLATE + 10, 22, 7967, 'Portal to Isle of Quel''Danas', '', '', '', 1, 49361, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0),
 (@GO_TEMPLATE + 11, 22, 4399, 'Portal to Caverns of Time', '', '', '', 1, 32271, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0);
 
--- Add these to your gameobject_template table:
 -- Add these after your existing gameobject_template entries
 
 SET @GO_TEMPLATE = 500040;
 
 REPLACE INTO `gameobject_template` (`entry`, `type`, `displayId`, `name`, `IconName`, `castBarCaption`, `unk1`, `size`, `Data0`, `Data1`, `Data2`, `Data3`, `Data4`, `Data5`, `Data6`, `Data7`, `Data8`, `Data9`, `Data10`, `Data11`, `Data12`, `Data13`, `Data14`, `Data15`, `Data16`, `Data17`, `Data18`, `Data19`, `Data20`, `Data21`, `Data22`, `Data23`, `AIName`, `ScriptName`, `VerifiedBuild`) VALUES
-(@GO_TEMPLATE + 0, 33, 4457, 'Training Dummy', '', '', '', 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0),
+(@GO_TEMPLATE + 0, 33, 4467, 'Training Dummy', '', '', '', 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0),
 (@GO_TEMPLATE + 1, 7, 192, 'Forge', '', '', '', 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0),
-(@GO_TEMPLATE + 2, 7, 4087, 'Anvil', '', '', '', 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0),
-(@GO_TEMPLATE + 3, 7, 161, 'Alchemy Lab', '', '', '', 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0),
-(@GO_TEMPLATE + 4, 7, 242, 'Cooking Fire', '', '', '', 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0);
+(@GO_TEMPLATE + 2, 7, 4085, 'Anvil', '', '', '', 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0),
+(@GO_TEMPLATE + 3, 7, 500043, 'Alchemy Lab', '', '', '', 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0),
+(@GO_TEMPLATE + 4, 7, 416, 'Cooking Fire', '', '', '', 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0);
+
+
+SET @GO_TEMPLATE = 600000;
+
+REPLACE INTO `creature_template` (`entry`, `name`, `subname`, `minlevel`, `maxlevel`, `faction`, `npcflag`, `trainer_type`, `trainer_class`, `trainer_race`) VALUES 
+(@GO_TEMPLATE + 1, 'Grand Master Cooking Trainer', 'Cooking Trainer', 80, 80, 35, 16, 2, 0, 0);
+
+REPLACE INTO `creature_template_model` (`CreatureID`, `Idx`, `CreatureDisplayID`, `DisplayScale`, `Probability`, `VerifiedBuild`) VALUES
+(@GO_TEMPLATE + 1, 0, 25903, 1, 1, 0); -- Human Female (or choose any displayId you prefer)
+
+REPLACE INTO `npc_trainer` (`ID`, `SpellID`, `MoneyCost`, `ReqSkillLine`, `ReqSkillRank`, `ReqLevel`) VALUES
+(@GO_TEMPLATE + 1, 2550, 1000, 185, 0, 1),      -- Cooking (Apprentice)
+(@GO_TEMPLATE + 1, 3102, 5000, 185, 50, 10),    -- Journeyman Cooking
+(@GO_TEMPLATE + 1, 3413, 10000, 185, 125, 20),  -- Expert Cooking
+(@GO_TEMPLATE + 1, 18260, 25000, 185, 200, 35), -- Artisan Cooking
+(@GO_TEMPLATE + 1, 33359, 50000, 185, 275, 50), -- Master Cooking
+(@GO_TEMPLATE + 1, 51296, 100000, 185, 350, 65);-- Grand Master Cooking

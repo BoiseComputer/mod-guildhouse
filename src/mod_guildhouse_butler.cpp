@@ -408,7 +408,7 @@ public:
                 case 19185:
                     trainerName = "First Aid Trainer";
                     break;
-                case 29631:
+                case 600001:
                     trainerName = "Cooking Trainer";
                     break;
                 case 28742:
