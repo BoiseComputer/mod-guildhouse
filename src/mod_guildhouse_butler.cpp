@@ -1478,10 +1478,12 @@ void SpawnNPC(uint32 entry, Player *player, bool force)
 };
 
 extern void AddGuildHouseScripts();
+extern void AddSC_npc_dual_spec_trainer();
 
 void Addmod_guildhouseScripts()
 {
-    AddGuildHouseScripts();     // Adds the guild house scripts
-    new GuildHouseSpawner();    // Loads the NPCs
-    new GuildHouseButlerConf(); // Loads the configuration
+    AddGuildHouseScripts();        // Adds the guild house scripts
+    new GuildHouseSpawner();       // Loads the NPCs
+    new GuildHouseButlerConf();    // Loads the configuration
+    AddSC_npc_dual_spec_trainer(); // Adds the dual spec trainer
 }

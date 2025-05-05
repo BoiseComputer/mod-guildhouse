@@ -18,7 +18,7 @@ REPLACE INTO `creature_template_model` (`CreatureID`, `Idx`, `CreatureDisplayID`
 (@C_TEMPLATE + 2, 0, 18234, 1, 1, 0),   -- Innkeeper Monica (Draenei Female)
 (@C_TEMPLATE + 3, 0, 26893, 1, 1, 0),   -- Dual Spec Trainer (Blood Elf Male)
 (@C_TEMPLATE + 4, 0, 26894, 1, 1, 0),   -- Transmogrifier (Blood Elf Female)
-(@C_TEMPLATE + 6, 0, 19724, 1, 1, 0),   -- Heirloom Vendor (Orc Female)
+(@C_TEMPLATE + 6, 0, 19701, 1, 1, 0),   -- Heirloom Vendor
 (@C_TEMPLATE + 7, 0, 21139, 1, 1, 0);   -- Battlemaster (Tauren Male)
 
 SET @C_TEMPLATE = 5000351;
@@ -69,7 +69,6 @@ REPLACE INTO `gameobject_template` (`entry`, `type`, `displayId`, `name`, `IconN
 (@GO_TEMPLATE + 3, 7, 500043, 'Alchemy Lab', '', '', '', 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0),
 (@GO_TEMPLATE + 4, 7, 416, 'Cooking Fire', '', '', '', 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0);
 
-
 SET @GO_TEMPLATE = 600000;
 
 REPLACE INTO `creature_template` (`entry`, `name`, `subname`, `minlevel`, `maxlevel`, `faction`, `npcflag`, `trainer_type`, `trainer_class`, `trainer_race`) VALUES 
@@ -85,3 +84,37 @@ REPLACE INTO `npc_trainer` (`ID`, `SpellID`, `MoneyCost`, `ReqSkillLine`, `ReqSk
 (@GO_TEMPLATE + 1, 18260, 25000, 185, 200, 35), -- Artisan Cooking
 (@GO_TEMPLATE + 1, 33359, 50000, 185, 275, 50), -- Master Cooking
 (@GO_TEMPLATE + 1, 51296, 100000, 185, 350, 65);-- Grand Master Cooking
+
+-- Example: Add some heirloom items to the vendor
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `ExtendedCost`) VALUES
+(500036, 42943, 0, 0, 0), -- Bloodied Arcanite Reaper
+(500036, 42944, 0, 0, 0), -- Balanced Heartseeker
+(500036, 42945, 0, 0, 0), -- Venerable Dal'Rend's Sacred Charge
+(500036, 42946, 0, 0, 0), -- Charmed Ancient Bone Bow
+(500036, 42947, 0, 0, 0), -- Dignified Headmaster's Charge
+(500036, 42948, 0, 0, 0), -- Devout Aurastone Hammer
+(500036, 42949, 0, 0, 0), -- Polished Spaulders of Valor
+(500036, 42950, 0, 0, 0), -- Champion Herod's Shoulder
+(500036, 42951, 0, 0, 0), -- Mystical Pauldrons of Elements
+(500036, 42952, 0, 0, 0), -- Stained Shadowcraft Spaulders
+(500036, 44091, 0, 0, 0), -- Sharpened Scarlet Kris
+(500036, 44092, 0, 0, 0), -- Reforged Truesilver Champion
+(500036, 44093, 0, 0, 0), -- Upgraded Dwarven Hand Cannon
+(500036, 44094, 0, 0, 0), -- The Blessed Hammer of Grace
+(500036, 44095, 0, 0, 0), -- Grand Staff of Jordan
+(500036, 44096, 0, 0, 0), -- Battleworn Thrash Blade
+(500036, 44100, 0, 0, 0), -- Prized Beastmaster's Mantle
+(500036, 44101, 0, 0, 0), -- Prized Beastmaster's Shoulders
+(500036, 44103, 0, 0, 0), -- Exceptional Stormshroud Shoulders
+(500036, 44105, 0, 0, 0), -- Lasting Feralheart Spaulders
+(500036, 44107, 0, 0, 0), -- Exquisite Sunderseer Mantle
+(500036, 44109, 0, 0, 0), -- Mystical Spring Robe
+(500036, 48677, 0, 0, 0), -- Champion's Deathdealer Breastplate
+(500036, 48683, 0, 0, 0), -- Polished Breastplate of Valor
+(500036, 48685, 0, 0, 0), -- Stained Shadowcraft Tunic
+(500036, 48687, 0, 0, 0), -- Mystical Vest of Elements
+(500036, 48689, 0, 0, 0), -- Tattered Dreadmist Robe
+(500036, 42985, 0, 0, 0), -- Discerning Eye of the Beast (Trinket)
+(500036, 42991, 0, 0, 0); -- Swift Hand of Justice (Trinket)
+
+-- Add more heirloom items as desired
