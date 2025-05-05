@@ -25,9 +25,8 @@ public:
         if (HasDualSpec(player))
         {
             LOG_INFO("module.guildhouse", "Player [{}] already has dual spec.", player->GetName());
-            server shutdown 1
-                // Show a message in the gossip window instead of just a system message
-                AddGossipItemFor(player, GOSSIP_ICON_CHAT, "You already have dual specialization.", GOSSIP_SENDER_MAIN, 0);
+            // Show a message in the gossip window instead of just a system message
+            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "You already have dual specialization.", GOSSIP_SENDER_MAIN, 0);
             SendGossipMenuFor(player, DEFAULT_GOSSIP_MESSAGE, creature->GetGUID());
             return true;
         }
