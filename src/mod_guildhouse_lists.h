@@ -79,3 +79,8 @@ static const std::set<uint32_t> portalEntries = {
     500008, // Shattrath
     500009  // Dalaran
 };
+
+static const std::set<uint32_t> starterPortalEntries = {
+    500000, // Stormwind
+    500004  // Orgrimmar
+};
